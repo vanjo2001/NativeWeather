@@ -46,7 +46,8 @@ class MainViewPresenter: MainViewPresenterProtocol {
                     output = town
                 }
                 
-                city = output
+                self.network.city = output
+//                city = city.replacingOccurrences(of: " ", with: "%20")
                 
                 self.getFormedData()
             }
@@ -54,9 +55,10 @@ class MainViewPresenter: MainViewPresenterProtocol {
     }
     
     func getFormedData() {
+        
         let queue = DispatchQueue(label: "com.vanjo")
         queue.async {
-            self.network.getJSONData(mainPath: testLink) { (res) in
+            self.network.getJSONData() { (res) in
                 
                 switch res {
                 case .success(let data):

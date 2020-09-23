@@ -9,18 +9,36 @@
 import Foundation
 
 //Test value    http://api.openweathermap.org/data/2.5/forecast?q=Minsk&appid=6485002c6ffd1d04876d0de28d75f187
+//              http://api.openweathermap.org/data/2.5/forecast?q=Rio%20de%20Janeiro&appid=6485002c6ffd1d04876d0de28d75f187
 
 protocol NetworkServiceProtocol: class {
-    func getJSONData(mainPath: String, completionHandler: @escaping (Result<WeatherData, Error>) -> ())
+    func getJSONData(completionHandler: @escaping (Result<WeatherData, Error>) -> ())
+    var link: String { get set }
+    var city: String { get set }
 }
 
 
 class NetworkService: NetworkServiceProtocol {
     
-    func getJSONData(mainPath: String, completionHandler: @escaping (Result<WeatherData, Error>) -> ()) {
+    
+    var city: String = "Minsk" {
+        didSet {
+            prepareLink()
+        }
+    }
+    
+    internal var link: String = ""
+    
+    func prepareLink() {
+        let copyCity = city.replacingOccurrences(of: " ", with: "%20")
+        link = "http://api.openweathermap.org/data/2.5/forecast?q=\(copyCity)&appid=\(RequestConstants.key)"
+        print(link)
+    }
+    
+    func getJSONData(completionHandler: @escaping (Result<WeatherData, Error>) -> ()) {
         let session = URLSession.shared
         
-        guard let url = URL(string: mainPath) else { return }
+        guard let url = URL(string: link) else { return }
         
         let task = session.dataTask(with: url) { (data, response, error) in
             if error != nil {
@@ -30,6 +48,7 @@ class NetworkService: NetworkServiceProtocol {
             guard let httpResponse = response as? HTTPURLResponse,
                     (200...299).contains(httpResponse.statusCode) else {
                 print("Server error!")
+                        print((response as! HTTPURLResponse).statusCode)
                 return
             }
             
