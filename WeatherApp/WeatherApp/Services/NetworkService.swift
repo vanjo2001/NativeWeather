@@ -11,13 +11,13 @@ import Foundation
 //Test value    http://api.openweathermap.org/data/2.5/forecast?q=Minsk&appid=6485002c6ffd1d04876d0de28d75f187
 
 protocol NetworkServiceProtocol: class {
-    func getJSONData(mainPath: String)
+    func getJSONData(mainPath: String, completionHandler: @escaping (Result<WeatherData, Error>) -> ())
 }
 
 
 class NetworkService: NetworkServiceProtocol {
     
-    func getJSONData(mainPath: String) {
+    func getJSONData(mainPath: String, completionHandler: @escaping (Result<WeatherData, Error>) -> ()) {
         let session = URLSession.shared
         
         guard let url = URL(string: mainPath) else { return }
@@ -35,7 +35,7 @@ class NetworkService: NetworkServiceProtocol {
             
             do {
                 let weatherData = try JSONDecoder().decode(WeatherData.self, from: data!)
-                print(weatherData)
+                completionHandler(.success(weatherData))
                 
             } catch DecodingError.keyNotFound(let key, let context) {
                 Swift.print("could not find key \(key) in JSON: \(context.debugDescription)")
@@ -46,6 +46,7 @@ class NetworkService: NetworkServiceProtocol {
             } catch DecodingError.dataCorrupted(let context) {
                 Swift.print("data found to be corrupted in JSON: \(context.debugDescription)")
             } catch let error as NSError {
+                completionHandler(.failure(error))
                 NSLog("Error in read(from:ofType:) domain= \(error.domain), description= \(error.localizedDescription)")
             }
             

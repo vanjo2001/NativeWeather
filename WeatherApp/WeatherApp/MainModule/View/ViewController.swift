@@ -11,15 +11,17 @@ import UIKit
 class ViewController: UIViewController {
 
     @IBOutlet weak var testLabel: UILabel!
+    @IBOutlet weak var weatherDescription: UILabel!
+    @IBOutlet weak var degreeOnThreeHours: UILabel!
     
+    @IBOutlet weak var hightPressure: UILabel!
+    @IBOutlet weak var lowPressure: UILabel!
     
     var presenter: MainViewPresenter!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let service = NetworkService()
-//        service.getJSONData(mainPath: testLink)
         
         let location = CoreLocationService()
         let network = NetworkService()
@@ -32,8 +34,9 @@ class ViewController: UIViewController {
 }
 
 extension ViewController: MainViewProtocol {
-    func sentMessage(message: String) {
-        testLabel.text = message
+    func sentMessage(message: WeatherData) {
+        testLabel.text = message.city?.name
+        weatherDescription.text = message.list?.first?.weather?.first?.description
         testLabel.isHidden = false
     }
     
