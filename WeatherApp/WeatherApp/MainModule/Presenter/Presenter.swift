@@ -23,6 +23,12 @@ class MainViewPresenter: MainViewPresenterProtocol {
     var network: NetworkServiceProtocol
     weak var view: MainViewProtocol?
     
+    var headerModel = [""]
+    var hourDataModel = [Int]()
+    var daysDataModel = [Int]()
+    var shortDescription = ""
+    var fullDetailsModel = FullDetails()
+    
     required init(view: MainViewProtocol, locationService: CoreLocationServiceProtocol, networkService: NetworkServiceProtocol) {
         location = locationService
         network = networkService

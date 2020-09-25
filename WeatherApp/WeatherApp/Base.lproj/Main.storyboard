@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16097" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="17156" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16087"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17125"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -15,8 +17,12 @@
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="McO-MB-bFx">
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <color key="backgroundColor" systemColor="systemBlueColor"/>
+                            </view>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="EHR-Bq-E0q">
-                                <rect key="frame" x="153" y="64" width="108.5" height="143"/>
+                                <rect key="frame" x="153" y="132.5" width="108.5" height="143"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Minsk" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="U5g-4L-DOe">
                                         <rect key="frame" x="15.5" y="0.0" width="77.5" height="36"/>
@@ -25,7 +31,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Partly Cloudy" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="FbO-ci-rqa">
-                                        <rect key="frame" x="3" y="36" width="102.5" height="20.5"/>
+                                        <rect key="frame" x="3" y="36" width="102" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -37,7 +43,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="4zT-VZ-u06">
-                                        <rect key="frame" x="13.5" y="122.5" width="81" height="20.5"/>
+                                        <rect key="frame" x="13.5" y="122.5" width="81.5" height="20.5"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="H:22°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="o7B-jk-0NV">
                                                 <rect key="frame" x="0.0" y="0.0" width="44.5" height="20.5"/>
@@ -46,7 +52,7 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="L:7°" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6P1-Lo-4L7">
-                                                <rect key="frame" x="50.5" y="0.0" width="30.5" height="20.5"/>
+                                                <rect key="frame" x="50.5" y="0.0" width="31" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -55,33 +61,64 @@
                                     </stackView>
                                 </subviews>
                             </stackView>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BHY-qC-poT">
-                                <rect key="frame" x="0.0" y="325" width="414" height="571"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="BHY-qC-poT">
+                                <rect key="frame" x="0.0" y="358.5" width="414" height="537.5"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="TableCollectionViewCell" rowHeight="44" id="mIz-Up-67o" customClass="TableCollectionViewCell" customModule="WeatherApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="mIz-Up-67o" id="Fj3-5r-npP">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="44"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </tableViewCellContentView>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <inset key="separatorInset" minX="15" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                    </tableViewCell>
+                                </prototypes>
+                                <sections/>
+                                <connections>
+                                    <outlet property="dataSource" destination="BYZ-38-t0r" id="Cck-zH-9xr"/>
+                                    <outlet property="delegate" destination="BYZ-38-t0r" id="a39-bU-dKm"/>
+                                </connections>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="McO-MB-bFx" secondAttribute="bottom" id="2At-h9-hdC"/>
                             <constraint firstItem="EHR-Bq-E0q" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="BP5-e6-fso"/>
                             <constraint firstItem="BHY-qC-poT" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="Bte-CX-AqL"/>
-                            <constraint firstItem="BHY-qC-poT" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.637277" id="Lzw-kL-c0e"/>
+                            <constraint firstItem="McO-MB-bFx" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="FxW-Yd-1Iw"/>
+                            <constraint firstItem="BHY-qC-poT" firstAttribute="top" secondItem="EHR-Bq-E0q" secondAttribute="bottom" multiplier="1.3" id="LaX-PN-XUD"/>
+                            <constraint firstItem="BHY-qC-poT" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" multiplier="0.6" id="Lzw-kL-c0e"/>
                             <constraint firstItem="BHY-qC-poT" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="Nls-5V-CBa"/>
                             <constraint firstAttribute="bottom" secondItem="BHY-qC-poT" secondAttribute="bottom" id="bzm-ua-gYX"/>
-                            <constraint firstItem="EHR-Bq-E0q" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="oHE-tU-wE6"/>
+                            <constraint firstItem="McO-MB-bFx" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="top" id="soh-nE-0G8"/>
+                            <constraint firstItem="McO-MB-bFx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="vLj-TY-Hnc"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <connections>
                         <outlet property="degreeOnThreeHours" destination="sWC-mT-b9A" id="4Lm-Gm-xMT"/>
                         <outlet property="hightPressure" destination="o7B-jk-0NV" id="MuT-45-Xmv"/>
                         <outlet property="lowPressure" destination="6P1-Lo-4L7" id="cT9-A9-Tvl"/>
+                        <outlet property="playerView" destination="McO-MB-bFx" id="Kek-eW-A9r"/>
+                        <outlet property="tableView" destination="BHY-qC-poT" id="fEl-AF-Bm1"/>
                         <outlet property="testLabel" destination="U5g-4L-DOe" id="i0H-oh-34D"/>
                         <outlet property="weatherDescription" destination="FbO-ci-rqa" id="Gmk-oj-yf8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="137.68115942028987" y="113.83928571428571"/>
+            <point key="canvasLocation" x="136.23188405797103" y="113.16964285714285"/>
         </scene>
     </scenes>
+    <resources>
+        <systemColor name="systemBackgroundColor">
+            <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+        </systemColor>
+        <systemColor name="systemBlueColor">
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
+    </resources>
 </document>
