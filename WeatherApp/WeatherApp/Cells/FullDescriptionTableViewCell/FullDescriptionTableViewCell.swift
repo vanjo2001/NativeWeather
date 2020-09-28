@@ -18,7 +18,7 @@ class FullDescriptionTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
+        setupShadow(views: [sunrise, sunset, sunriseTime, sunsetTime])
     }
 
     

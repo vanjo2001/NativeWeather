@@ -27,8 +27,10 @@ class DayTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+        
+        setupShadow(views: [weekDay, imgView, maxDegree, minDegree])
     }
+    
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)

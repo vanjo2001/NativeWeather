@@ -12,20 +12,23 @@ import AVFoundation
 class ViewController: UIViewController, MainViewProtocol {
     
     
-    var presenter: MainViewPresenterProtocol!
-    
     @IBOutlet weak var tableView: UITableView!
-    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
     
-    @IBOutlet weak var testLabel: UILabel!
-    @IBOutlet weak var weatherDescription: UILabel!
-    @IBOutlet weak var degreeOnThreeHours: UILabel!
-    @IBOutlet weak var hightPressure: UILabel!
-    @IBOutlet weak var lowPressure: UILabel!
+    @IBOutlet weak var cityLabel: UILabel!
+    @IBOutlet weak var weatherDescriptionLabel: UILabel!
+    
+    //Should be animated
+    @IBOutlet weak var degreeOnThreeHoursLabel: UILabel!
+    @IBOutlet weak var hightPressureLabel: UILabel!
+    @IBOutlet weak var lowPressureLabel: UILabel!
     
     @IBOutlet weak var playerView: UIView!
     
+    
+    var presenter: MainViewPresenterProtocol!
+    var animator: UIViewPropertyAnimator!
     var player: AVPlayer!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,11 +39,12 @@ class ViewController: UIViewController, MainViewProtocol {
         
         registerCells()
         
+        setupLabels()
         setupTableView()
         
         presenter = MainViewPresenter(view: self, locationService: location, networkService: network)
         setupVideoPlayer()
-        
+        setupPropertyViewAnimator()
         
     }
     
@@ -80,19 +84,19 @@ class ViewController: UIViewController, MainViewProtocol {
     
     func sentMessage(message: WeatherFullModel) {
         
-        testLabel.text = message.city?.name
-        weatherDescription.text = message.list?.first?.getWeather.description
-        testLabel.isHidden = false
-        degreeOnThreeHours.text = presenter.getThreeHourDataModelArr.first?.getTemperature
+        cityLabel.text = message.city?.name
+        weatherDescriptionLabel.text = message.list?.first?.getWeather.description
+        cityLabel.isHidden = false
+        degreeOnThreeHoursLabel.text = presenter.getThreeHourDataModelArr.first?.getTemperature
         tableView.reloadData()
     }
     
     func failLoad(data: MainModel) {
         print(presenter.getWeatherModel)
         
-        weatherDescription.text = data.shortDescription
-        degreeOnThreeHours.text = data.deegre
-        testLabel.text = data.city
+        weatherDescriptionLabel.text = data.shortDescription
+        degreeOnThreeHoursLabel.text = data.deegre
+        cityLabel.text = data.city
         
         tableView.reloadData()
     }
@@ -107,6 +111,25 @@ class ViewController: UIViewController, MainViewProtocol {
         tableView.register(UINib(nibName: IdentifierConstants.fullDescriptionCell, bundle: Bundle.main),
                            forCellReuseIdentifier: IdentifierConstants.fullDescriptionCell)
         
+    }
+    
+    //MARK: - Interaction
+    
+    func setupPropertyViewAnimator() {
+        animator = UIViewPropertyAnimator()
+        degreeOnThreeHoursLabel.alpha = 1
+        hightPressureLabel.alpha = 1
+        lowPressureLabel.alpha = 1
+        
+        animator.addAnimations {
+            self.degreeOnThreeHoursLabel.alpha = 0
+            self.hightPressureLabel.alpha = 0
+            self.lowPressureLabel.alpha = 0
+        }
+    }
+    
+    func setupLabels() {
+        setupShadow(views: [cityLabel, weatherDescriptionLabel, degreeOnThreeHoursLabel, hightPressureLabel, lowPressureLabel])
     }
 
 

@@ -34,7 +34,9 @@ class ThreeHourCollectionViewCell: UICollectionViewCell {
         super.awakeFromNib()
         // Initialization code
         setupLayout()
+        setupShadow(views: [time, image, degree])
     }
+    
     
     func setupLayout() {
         translatesAutoresizingMaskIntoConstraints = false

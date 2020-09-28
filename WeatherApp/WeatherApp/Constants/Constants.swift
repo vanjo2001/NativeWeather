@@ -48,3 +48,10 @@ struct SizeConstants {
             //SizeConstants.screenRatio * 125 < SizeConstants.screenHeight * 0.3 ? SizeConstants.screenRatio * 100 : SizeConstants.screenRatio * 125
     }
 }
+
+struct LabelDesignConstants {
+    static let shadowColor = UIColor.black.cgColor
+    static let shadowRadius: CGFloat = 0.54
+    static let shadowOpacity: Float = 0.2
+    static let shadowOffset = CGSize(width: 0.75, height: 0.75)
+}

@@ -15,7 +15,7 @@ class DescriptionTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        
+        setupShadow(views: [shortDescription])
         
         // Initialization code
     }

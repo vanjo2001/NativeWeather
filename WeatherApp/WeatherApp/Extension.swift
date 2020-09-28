@@ -63,7 +63,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
         
         //Player layer
         
-        let positionY = SizeConstants.screenHeight * 0.6 - SizeConstants.screenHeight
+        let positionY = SizeConstants.screenHeight * 0.64 - SizeConstants.screenHeight
         let height = SizeConstants.screenHeight
         
         let playerLayer = AVPlayerLayer(player: player)
@@ -158,12 +158,10 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
     //MARK: - UIScroll
     
     
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//
-//        print(scrollView.contentOffset.y)
-//
-//
-//    }
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+
+        animator.fractionComplete = scrollView.contentOffset.y/75
+    }
     
     
     
