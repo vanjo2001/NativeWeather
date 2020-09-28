@@ -9,7 +9,7 @@
 import Foundation
 
 protocol NetworkServiceProtocol: class {
-    func getJSONData(completionHandler: @escaping (Result<WeatherData, Error>) -> ())
+    func getJSONData(completionHandler: @escaping (Result<WeatherFullModel, Error>) -> ())
     var link: String { get set }
     var city: String { get set }
 }
@@ -32,7 +32,7 @@ class NetworkService: NetworkServiceProtocol {
         print(link)
     }
     
-    func getJSONData(completionHandler: @escaping (Result<WeatherData, Error>) -> ()) {
+    func getJSONData(completionHandler: @escaping (Result<WeatherFullModel, Error>) -> ()) {
         let session = URLSession.shared
         
         guard let url = URL(string: link) else { return }
@@ -50,7 +50,7 @@ class NetworkService: NetworkServiceProtocol {
             }
             
             do {
-                let weatherData = try JSONDecoder().decode(WeatherData.self, from: data!)
+                let weatherData = try JSONDecoder().decode(WeatherFullModel.self, from: data!)
                 completionHandler(.success(weatherData))
                 
             } catch DecodingError.keyNotFound(let key, let context) {

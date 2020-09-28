@@ -77,7 +77,7 @@ class ViewController: UIViewController, MainViewProtocol {
     
     //MainViewProtocol
     
-    func sentMessage(message: WeatherData) {
+    func sentMessage(message: WeatherFullModel) {
         
         testLabel.text = message.city?.name
         weatherDescription.text = message.list?.first?.getWeather.description

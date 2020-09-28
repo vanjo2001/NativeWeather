@@ -10,18 +10,10 @@
 import Foundation
 import CoreData
 
-//@objc
-protocol DayModelProtocol {
-    var afterdaysWeekday: String? { get set }
-    var afterdaysMostCommonIcon: String? { get set }
-    var afterdaysMaxTemperature: Double { get set }
-    var afterdaysMinTemperature: Double { get set }
-    var windSpeed: Double { get set }
-    var weatherShortDescription: String? { get set }
-}
 
-
-extension WeatherModel: DayModelProtocol {
+extension WeatherModel: DayModelProtocol, WeatherFullModelProtocol {
+    
+    
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<WeatherModel> {
         return NSFetchRequest<WeatherModel>(entityName: "WeatherModel")
@@ -31,16 +23,16 @@ extension WeatherModel: DayModelProtocol {
     @NSManaged public var afterdaysMinTemperature: Double
     @NSManaged public var afterdaysMostCommonIcon: String?
     @NSManaged public var afterdaysWeekday: String?
-    @NSManaged public var feelsLike: String?
-    @NSManaged public var humidity: String?
+    @NSManaged public var feelsLike: Double
+    @NSManaged public var humidity: Int64
     @NSManaged public var id: Int64
     @NSManaged public var perThreeHourIconName: String?
     @NSManaged public var perThreeHourTemperature: Double
     @NSManaged public var perThreeHourTime: String?
-    @NSManaged public var pressure: String?
-    @NSManaged public var sunrise: String?
-    @NSManaged public var sunset: String?
-    @NSManaged public var visibility: String?
+    @NSManaged public var pressure: Int64
+    @NSManaged public var sunrise: Int64
+    @NSManaged public var sunset: Int64
+    @NSManaged public var visibility: Int64
     @NSManaged public var weatherShortDescription: String?
     @NSManaged public var wind: String?
     @NSManaged public var windSpeed: Double

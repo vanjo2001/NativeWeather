@@ -63,6 +63,7 @@ public func kelvinToCelsius(input: Double?) -> Int {
 typealias Value = (String, String)
 
 struct FullDetailsModel {
+    
     typealias Form = (String, String)
 
     
@@ -85,7 +86,7 @@ struct FullDetailsModel {
     
     func getHumidity(_ humidity: Int?) -> String {
         stringFinalization(input: humidity,
-                               addition: SpecialSign.rawValue(value: .degree),
+                               addition: SpecialSign.rawValue(value: .procent),
                                space: true)
     }
     
@@ -117,22 +118,24 @@ struct FullDetailsModel {
                            space: true)
     }
     
-    func unwrapingComing(_ input: WeatherData) {
+    func unwrapingComing(_ input: WeatherFullModelProtocol) {
         
-        let sunrise = input.city?.sunrise
-        let sunset = input.city?.sunset
-        let humidity = input.getFirst.main?.humidity
-        let wind = input.getFirst.wind?.speed
-        let feelsLike = input.getFirst.main?.feelsLike
-        let pressure = input.getFirst.main?.pressure
-        let visibility = input.getFirst.visibility
+        FullDetailsModel.presentData = []
+        
+        let sunrise = input.sunrise
+        let sunset = input.sunset
+        let humidity = input.humidity
+        let wind = input.windSpeed
+        let feelsLike = input.feelsLike
+        let pressure = input.pressure
+        let visibility = input.visibility
         
         
-        FullDetailsModel.presentData.append(Value(getSunrise(sunrise), getSunset(sunset)))
-        FullDetailsModel.presentData.append(Value("-", getFeelsLike(Int(feelsLike ?? 0.0))))
-        FullDetailsModel.presentData.append(Value(getWind(wind), getHumidity(humidity)))
-        FullDetailsModel.presentData.append(Value("-", getPressure(pressure)))
-        FullDetailsModel.presentData.append(Value(getVisibility(visibility), "-"))
+        FullDetailsModel.presentData.append(Value(getSunrise(Int(sunrise)), getSunset(Int(sunset))))
+        FullDetailsModel.presentData.append(Value("-", getHumidity(Int(humidity))))
+        FullDetailsModel.presentData.append(Value(getWind(wind), getFeelsLike(Int(feelsLike))))
+        FullDetailsModel.presentData.append(Value("-", getPressure(Int(pressure))))
+        FullDetailsModel.presentData.append(Value(getVisibility(Int(visibility)), "-"))
     }
     
 }

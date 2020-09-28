@@ -8,8 +8,79 @@
 
 import Foundation
 
+//Objc
+protocol DayModelProtocol {
+    var afterdaysWeekday: String? { get set }
+    var afterdaysMostCommonIcon: String? { get set }
+    var afterdaysMaxTemperature: Double { get set }
+    var afterdaysMinTemperature: Double { get set }
+    var windSpeed: Double { get set }
+    var weatherShortDescription: String? { get set }
+}
+
+
+protocol WeatherFullModelProtocol {
+    var sunrise: Int64 { get set }
+    var sunset: Int64 { get set }
+    var humidity: Int64 { get set }
+    var windSpeed: Double { get set }
+    var feelsLike: Double { get set }
+    var pressure: Int64 { get set }
+    var visibility: Int64 { get set }
+}
+
 //MARK: - MainModel
-struct WeatherData: Decodable {
+struct WeatherFullModel: Decodable, WeatherFullModelProtocol {
+    
+    var sunrise: Int64 {
+        get {
+            Int64(city?.sunrise ?? 0)
+        }
+        set {}
+    }
+    
+    var sunset: Int64 {
+        get {
+            Int64(city?.sunset ?? 0)
+        }
+        set {}
+    }
+    
+    var humidity: Int64 {
+        get {
+            Int64(getFirst.main?.humidity ?? 0)
+        }
+        set {}
+    }
+    
+    var windSpeed: Double {
+        get {
+            getFirst.windSpeed
+        }
+        set {}
+    }
+    
+    var feelsLike: Double {
+        get {
+            getFirst.main?.feelsLike ?? 0.0
+        }
+        set {}
+    }
+    
+    var pressure: Int64 {
+        get {
+            Int64(getFirst.main?.pressure ?? 0)
+        }
+        set {}
+    }
+    
+    var visibility: Int64 {
+        get {
+            Int64(getFirst.visibility ?? 0)
+        }
+        set {}
+    }
+    
     
     
     var cod: String?

@@ -11,7 +11,7 @@ import CoreLocation
 import CoreData
 
 protocol MainViewProtocol: class {
-    func sentMessage(message: WeatherData)
+    func sentMessage(message: WeatherFullModel)
     func failLoad(data: MainModel)
 }
 
@@ -128,7 +128,7 @@ class MainViewPresenter: MainViewPresenterProtocol {
                         self.createData(threeHourFiveDays: self.threeHourDataModelArr,
                                    forecastDays: self.daysDataModel,
                                    description: data.getFirst.getWeather.description ?? "undefined",
-                                   fullDescription: FullDetailsModel.presentData)
+                                   fullDescription: data)
 
                         self.view!.sentMessage(message: data)
                     }
@@ -144,7 +144,7 @@ class MainViewPresenter: MainViewPresenterProtocol {
     
     //MARK: - CoreData methods
     
-    private func createData(threeHourFiveDays: [ThreeHourModel], forecastDays: [DayModel], description: String, fullDescription: [Value]) {
+    private func createData(threeHourFiveDays: [ThreeHourModel], forecastDays: [DayModel], description: String, fullDescription: WeatherFullModel) {
         deleteData()
         
         for (i, threeHour) in threeHourFiveDays.enumerated() {
@@ -172,13 +172,13 @@ class MainViewPresenter: MainViewPresenterProtocol {
         allData.first?.weatherShortDescription = description
         allData.first?.city = network.city
         
-        allData.first?.sunrise = fullDescription[0].0
-        allData.first?.sunset = fullDescription[0].1
-        allData.first?.humidity = fullDescription[1].1
-        allData.first?.wind = fullDescription[2].0
-        allData.first?.feelsLike = fullDescription[2].1
-        allData.first?.pressure = fullDescription[3].1
-        allData.first?.visibility = fullDescription[4].0
+        allData.first?.sunrise = fullDescription.sunrise
+        allData.first?.sunset = fullDescription.sunset
+        allData.first?.humidity = fullDescription.humidity
+        allData.first?.windSpeed = fullDescription.windSpeed
+        allData.first?.feelsLike = fullDescription.feelsLike
+        allData.first?.pressure = fullDescription.pressure
+        allData.first?.visibility = fullDescription.visibility
 
         saveContext()
         
@@ -192,6 +192,8 @@ class MainViewPresenter: MainViewPresenterProtocol {
         threeHourDataModelArr = threeHourModelArr
         daysDataModel = daysDataModelArr
         description = daysDataModel.first?.getDescription ?? "undefined"
+        
+        FullDetailsModel().unwrapingComing(models.first ?? WeatherModel())
 
     }
     
