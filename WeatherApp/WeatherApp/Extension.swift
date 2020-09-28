@@ -14,7 +14,6 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
     //MARK: - HeaderCell datasource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-//        return presenter.getThreeHourDataModelArr.count <= 0 ? 16 : presenter.getThreeHourDataModelArr.count
         return WeatherConstants.twoDaysByThreeHour
     }
     
@@ -71,7 +70,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
         playerLayer.frame = CGRect(x: 0, y: positionY, width: view.bounds.width, height: height)
         videoView.layer.addSublayer(playerLayer)
         playerLayer.videoGravity = AVLayerVideoGravity.resizeAspectFill
-        player.play()
+//        player.play()
         
         
         mainView.addSubview(videoView)
@@ -159,9 +158,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
     //MARK: - UIScroll
     
     
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        
-    }
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//
+//        print(scrollView.contentOffset.y)
+//
+//
+//    }
     
     
     

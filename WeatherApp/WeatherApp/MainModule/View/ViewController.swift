@@ -15,6 +15,7 @@ class ViewController: UIViewController, MainViewProtocol {
     var presenter: MainViewPresenterProtocol!
     
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var tableViewHeightConstraint: NSLayoutConstraint!
     
     @IBOutlet weak var testLabel: UILabel!
     @IBOutlet weak var weatherDescription: UILabel!

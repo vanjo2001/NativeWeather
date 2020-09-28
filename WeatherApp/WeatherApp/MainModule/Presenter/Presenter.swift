@@ -91,18 +91,19 @@ class MainViewPresenter: MainViewPresenterProtocol {
     private func getLocation() {
         
         location.updateLocation = { (loc) in
+            
             self.location.getPlace(for: loc) { placemark in
-                
+
                 guard let placemark = placemark else { return }
-                
+
                 var output = ""
-                
+
                 if let town = placemark.locality {
                     output = town
                 }
-                
+
                 self.network.city = output
-                
+
                 self.getFormedData()
             }
         }
@@ -170,7 +171,7 @@ class MainViewPresenter: MainViewPresenterProtocol {
         
         //I'm very sorry about below( I'm swear this is the last time when i'm doing like this
         allData.first?.weatherShortDescription = description
-        allData.first?.city = network.city
+        allData.first?.city = fullDescription.city?.name
         
         allData.first?.sunrise = fullDescription.sunrise
         allData.first?.sunset = fullDescription.sunset
