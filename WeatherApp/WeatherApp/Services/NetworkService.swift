@@ -8,9 +8,6 @@
 
 import Foundation
 
-//Test value    http://api.openweathermap.org/data/2.5/forecast?q=Minsk&appid=6485002c6ffd1d04876d0de28d75f187
-//              http://api.openweathermap.org/data/2.5/forecast?q=Rio%20de%20Janeiro&appid=6485002c6ffd1d04876d0de28d75f187
-
 protocol NetworkServiceProtocol: class {
     func getJSONData(completionHandler: @escaping (Result<WeatherData, Error>) -> ())
     var link: String { get set }

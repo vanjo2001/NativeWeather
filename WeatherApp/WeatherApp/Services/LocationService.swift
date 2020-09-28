@@ -11,13 +11,13 @@ import CoreLocation
 
 protocol CoreLocationServiceProtocol: class {
     func getPlace(for location: CLLocation, completion: @escaping (CLPlacemark?) -> ())
-    var updateLocation: ((CLLocation) -> ())! { get set }
+    var updateLocation: ((CLLocation) -> ())? { get set }
 }
 
 
 class CoreLocationService: NSObject, CoreLocationServiceProtocol {
     
-    var updateLocation: ((CLLocation) -> ())!
+    var updateLocation: ((CLLocation) -> ())?
     
     private let locationManager = CLLocationManager()
     
@@ -65,7 +65,7 @@ extension CoreLocationService: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         let lastLocation = locations.last!
-        updateLocation(lastLocation)
+        updateLocation?(lastLocation)
         
     }
 }

@@ -15,6 +15,16 @@ class DayTableViewCell: UITableViewCell {
     @IBOutlet weak var maxDegree: UILabel!
     @IBOutlet weak var minDegree: UILabel!
     
+    
+    var data: DayModel! {
+        didSet {
+            weekDay.text = data.afterdaysWeekday
+            imgView.image = UIImage(named: data.getIconName)
+            maxDegree.text = data.getMaxTemperature
+            minDegree.text = data.getMinTemperature
+        }
+    }
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

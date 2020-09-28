@@ -20,6 +20,20 @@ struct RequestConstants {
     static let key = "6485002c6ffd1d04876d0de28d75f187"
 }
 
+struct WeatherConstants {
+    static let twoDaysByThreeHour = 16
+    static let days = 4
+}
+
+struct CoreDataModelConstants {
+    static let weatherModel = "WeatherAppModel"
+    static let entityName = "WeatherModel"
+}
+
+struct TableDesignConstants {
+    static let separatorColor = UIColor.lightText
+}
+
 struct SizeConstants {
     static let screenHeight = UIScreen.main.bounds.height
     static let screenWidth  = UIScreen.main.bounds.width
@@ -30,6 +44,7 @@ struct SizeConstants {
     }
     
     struct CellSizes {
-        static let fiveDaysHeight = SizeConstants.screenRatio * 125
+        static let fullDescriptionHeight = SizeConstants.screenRatio > 2.1 ? SizeConstants.screenRatio * 100 : SizeConstants.screenRatio * 125
+            //SizeConstants.screenRatio * 125 < SizeConstants.screenHeight * 0.3 ? SizeConstants.screenRatio * 100 : SizeConstants.screenRatio * 125
     }
 }

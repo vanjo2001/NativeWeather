@@ -8,26 +8,55 @@
 
 import Foundation
 import CoreLocation
+import CoreData
 
 protocol MainViewProtocol: class {
     func sentMessage(message: WeatherData)
+    func failLoad(data: MainModel)
 }
 
 protocol MainViewPresenterProtocol: class {
     init(view: MainViewProtocol, locationService: CoreLocationServiceProtocol, networkService: NetworkServiceProtocol)
+    
+    var getThreeHourDataModelArr: [ThreeHourModel] { get }
+    var getDaysDataModelArr: [DayModel] { get }
+    var getDescription: String { get }
+    var getWeatherModel: [WeatherModel] { get }
+    
 }
 
 class MainViewPresenter: MainViewPresenterProtocol {
+
+    
+    
+    
+    var getWeatherModel: [WeatherModel] {
+        allData
+    }
+    
+    var getDescription: String {
+        description
+    }
+    
+    var getDaysDataModelArr: [DayModel] {
+        daysDataModel
+    }
+
+    var getThreeHourDataModelArr: [ThreeHourModel] {
+        threeHourDataModelArr
+    }
     
     var location: CoreLocationServiceProtocol
     var network: NetworkServiceProtocol
     weak var view: MainViewProtocol?
     
-    var headerModel = [""]
-    var hourDataModel = [Int]()
-    var daysDataModel = [Int]()
-    var shortDescription = ""
-    var fullDetailsModel = FullDetails()
+    
+    private var allData: [WeatherModel] = []
+    
+    private var description: String = ""
+    private var threeHourDataModelArr = [ThreeHourModel]()
+    private var daysDataModel = [DayModel]()
+//    private var fullDetailsModel = FullDetailsModel()
     
     required init(view: MainViewProtocol, locationService: CoreLocationServiceProtocol, networkService: NetworkServiceProtocol) {
         location = locationService
@@ -35,11 +64,31 @@ class MainViewPresenter: MainViewPresenterProtocol {
         
         self.view = view
         
-        getLocation()
+        NetworkCheckingService.monitorChecking { (status) in
+            switch status {
+            case .satisfied:
+                self.getLocation()
+            case .unsatisfied:
+                
+                if self.allData.isEmpty {
+                    
+                    DispatchQueue.main.async {
+                        self.retrieveData()
+                    }
+                    
+                }
+                
+                print("(")
+            default:
+                print("default")
+            }
+        }
+        
+        
     }
     
     
-    func getLocation() {
+    private func getLocation() {
         
         location.updateLocation = { (loc) in
             self.location.getPlace(for: loc) { placemark in
@@ -53,14 +102,13 @@ class MainViewPresenter: MainViewPresenterProtocol {
                 }
                 
                 self.network.city = output
-//                city = city.replacingOccurrences(of: " ", with: "%20")
                 
                 self.getFormedData()
             }
         }
     }
     
-    func getFormedData() {
+    private func getFormedData() {
         
         let queue = DispatchQueue(label: "com.vanjo")
         queue.async {
@@ -68,16 +116,133 @@ class MainViewPresenter: MainViewPresenterProtocol {
                 
                 switch res {
                 case .success(let data):
+                    
+                    self.threeHourDataModelArr = ThreeHourModel.unwrapComing(input: data.list ?? [DeepWeatherInfo]())
+                    self.daysDataModel = DayModel.unwrapComing(input: data.list ?? [DeepWeatherInfo](), countOfDays: 4)
+                    self.description = self.daysDataModel.first?.getDescription ?? "undefined"
+                    
+                    FullDetailsModel().unwrapingComing(data)
+                    
                     DispatchQueue.main.async {
+                        
+                        self.createData(threeHourFiveDays: self.threeHourDataModelArr,
+                                   forecastDays: self.daysDataModel,
+                                   description: data.getFirst.getWeather.description ?? "undefined",
+                                   fullDescription: FullDetailsModel.presentData)
+
                         self.view!.sentMessage(message: data)
                     }
                 case .failure(let error):
+//                    self.view?.failLoad()
                     print(error.localizedDescription)
                 }
 
-                print(res)
             }
         }
+    }
+    
+    
+    //MARK: - CoreData methods
+    
+    private func createData(threeHourFiveDays: [ThreeHourModel], forecastDays: [DayModel], description: String, fullDescription: [Value]) {
+        deleteData()
+        
+        for (i, threeHour) in threeHourFiveDays.enumerated() {
+            let model = WeatherModel(context: PersistenceService.context)
+            model.perThreeHourTime = threeHour.getClearTime
+            model.perThreeHourTemperature = threeHour.getClearTemperature ?? 0.0
+            model.perThreeHourIconName = threeHour.getClearIconName
+            model.id = Int64(i)
+            
+            saveContext()
+            
+            allData.append(model)
+            
+        }
+        
+        for (i, forecastDay) in forecastDays.enumerated() {
+            allData[i].afterdaysWeekday = forecastDay.afterdaysWeekday
+            allData[i].afterdaysMostCommonIcon = forecastDay.afterdaysMostCommonIcon
+            allData[i].afterdaysMaxTemperature = forecastDay.afterdaysMaxTemperature
+            allData[i].afterdaysMinTemperature = forecastDay.afterdaysMinTemperature
+            saveContext()
+        }
+        
+        //I'm very sorry about below( I'm swear this is the last time when i'm doing like this
+        allData.first?.weatherShortDescription = description
+        allData.first?.city = network.city
+        
+        allData.first?.sunrise = fullDescription[0].0
+        allData.first?.sunset = fullDescription[0].1
+        allData.first?.humidity = fullDescription[1].1
+        allData.first?.wind = fullDescription[2].0
+        allData.first?.feelsLike = fullDescription[2].1
+        allData.first?.pressure = fullDescription[3].1
+        allData.first?.visibility = fullDescription[4].0
+
+        saveContext()
+        
+    }
+    
+    private func transitionData(models: [WeatherModel]) {
+
+        let threeHourModelArr: [ThreeHourModel] = ThreeHourModel.unwrapComing(input: models)
+        let daysDataModelArr: [DayModel] = DayModel.unwrapComing(input: models, countOfDays: 4)
+
+        threeHourDataModelArr = threeHourModelArr
+        daysDataModel = daysDataModelArr
+        description = daysDataModel.first?.getDescription ?? "undefined"
+
+    }
+    
+    private func retrieveData() {
+        
+        let fetchRequest: NSFetchRequest<WeatherModel> = WeatherModel.fetchRequest()
+        let sectionSortDescriptor = NSSortDescriptor(key: "id", ascending: true)
+        
+        fetchRequest.sortDescriptors = [sectionSortDescriptor]
+        
+        do {
+            let data = try PersistenceService.context.fetch(fetchRequest)
+            allData = data
+            transitionData(models: allData)
+            
+            view?.failLoad(data: MainModel(city: allData.first?.city ?? "undefined",
+                                           deegre: threeHourDataModelArr.first?.getTemperature ?? "undefined",
+                                           shortDescription: allData.first?.weatherShortDescription ?? "undefined"))
+        } catch let error {
+            print(error.localizedDescription)
+        }
+        
+    }
+    
+    private func deleteData() {
+        allData = []
+        let managedContext = PersistenceService.context
+
+        let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: CoreDataModelConstants.entityName)
+
+        do {
+            let test = try managedContext.fetch(fetchRequest)
+
+            let objectToDelete = test as! [NSManagedObject]
+            for one in objectToDelete {
+                managedContext.delete(one)
+            }
+
+            do {
+                try managedContext.save()
+            } catch {
+                print(error)
+            }
+
+        } catch {
+            print(error)
+        }
+    }
+    
+    private func saveContext() {
+        PersistenceService.saveContext()
     }
     
     

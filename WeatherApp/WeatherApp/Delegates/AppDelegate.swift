@@ -24,7 +24,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let vc = UIStoryboard(name: "Main", bundle: Bundle.main)
             self.window!.rootViewController = vc.instantiateInitialViewController() as! ViewController
             self.window!.makeKeyAndVisible()
-//            self.window!.backgroundColor = .red
         }
         
         

@@ -14,11 +14,17 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
     //MARK: - HeaderCell datasource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 16
+//        return presenter.getThreeHourDataModelArr.count <= 0 ? 16 : presenter.getThreeHourDataModelArr.count
+        return WeatherConstants.twoDaysByThreeHour
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IdentifierConstants.threeHour, for: indexPath)
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IdentifierConstants.threeHour, for: indexPath) as! ThreeHourCollectionViewCell
+        if presenter.getThreeHourDataModelArr.count == 0 {
+            return cell
+        }
+        cell.data = presenter.getThreeHourDataModelArr[indexPath.row]
+        
         return cell
     }
     
@@ -85,7 +91,7 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
         let collectionView = UICollectionView(frame: CGRect.zero, collectionViewLayout: flowLoayout)
         
         collectionView.layer.borderWidth = 0.8
-        collectionView.layer.borderColor = UIColor.gray.cgColor
+        collectionView.layer.borderColor = UIColor.lightText.cgColor
         
         collectionView.backgroundColor = .clear
         
@@ -96,10 +102,12 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
         return collectionView
     }
     
+    
+    
     //MARK: - TableView
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return FullDetails.present.count + 2
+        return FullDetailsModel.presentModel.count + 2
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -107,15 +115,29 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
         switch indexPath.row {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: IdentifierConstants.days, for: indexPath) as! DaysTableViewCell
+            cell.arrOfData = presenter.getDaysDataModelArr
             cell.backgroundColor = .clear
+            cell.separatorInset = .zero
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: IdentifierConstants.descriptionCell, for: indexPath) as! DescriptionTableViewCell
+            cell.shortDescription.text = presenter.getDescription
             cell.backgroundColor = .clear
+            cell.separatorInset = .zero
             return cell
-        case 2...FullDetails.present.count+2:
+        case 2...FullDetailsModel.presentModel.count+2:
             let cell = tableView.dequeueReusableCell(withIdentifier: IdentifierConstants.fullDescriptionCell, for: indexPath) as! FullDescriptionTableViewCell
+            
+            cell.sunrise.text = FullDetailsModel.presentModel[indexPath.row-2].0
+            cell.sunset.text = FullDetailsModel.presentModel[indexPath.row-2].1
+            
+            if (FullDetailsModel.presentData.count != 0) {
+                cell.sunriseTime.text = FullDetailsModel.presentData[indexPath.row-2].0
+                cell.sunsetTime.text = FullDetailsModel.presentData[indexPath.row-2].1
+            }
+
             cell.backgroundColor = .clear
+            cell.separatorInset = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
             return cell
         default:
             return UITableViewCell()
@@ -127,11 +149,39 @@ extension ViewController: UITableViewDataSource, UITableViewDelegate, UICollecti
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.row {
         case 0:
-            return SizeConstants.CellSizes.fiveDaysHeight
+            return SizeConstants.CellSizes.fullDescriptionHeight
         default:
             return UITableView.automaticDimension
         }
     }
     
     
+    //MARK: - UIScroll
+    
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        
+    }
+    
+    
+    
+}
+
+//MARK: - Date extension
+
+extension Date {
+    func dayOfWeek() -> DayOfWeek {
+        let res = Calendar.current.dateComponents([.weekday], from: self).weekday!
+        return DayOfWeek(rawValue: res) ?? DayOfWeek.Monday
+    }
+    
+    func dayOfWeekToString() -> String {
+        let current = dayOfWeek()
+        return DayOfWeek.getName(value: current)
+    }
+    
+    func daysOfWeekToString(_ count: Int) -> [String] {
+        let current = dayOfWeek()
+        return DayOfWeek.getNames(value: current, count)
+    }
 }

@@ -16,6 +16,19 @@ class ThreeHourCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var stackView: UIStackView!
     
+    var data: ThreeHourModel! {
+        didSet {
+            time.text = data.getTime
+            
+            if time.text == "now" {
+                time.font = UIFont.boldSystemFont(ofSize: time.font.pointSize)
+                degree.font = UIFont.boldSystemFont(ofSize: degree.font.pointSize)
+            }
+            
+            image.image = UIImage(named: data.getIconName)
+            degree.text = data.getTemperature
+        }
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -30,6 +43,11 @@ class ThreeHourCollectionViewCell: UICollectionViewCell {
         stackView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
         stackView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
         stackView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
+    }
+    
+    override func prepareForReuse() {
+        time.font = UIFont.systemFont(ofSize: time.font.pointSize)
+        degree.font = UIFont.systemFont(ofSize: degree.font.pointSize)
     }
     
 }

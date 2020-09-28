@@ -11,6 +11,9 @@ import AVFoundation
 
 class ViewController: UIViewController, MainViewProtocol {
     
+    
+    var presenter: MainViewPresenterProtocol!
+    
     @IBOutlet weak var tableView: UITableView!
     
     @IBOutlet weak var testLabel: UILabel!
@@ -23,24 +26,29 @@ class ViewController: UIViewController, MainViewProtocol {
     
     var player: AVPlayer!
     
-    var presenter: MainViewPresenter!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         let location = CoreLocationService()
         let network = NetworkService()
-        tableView.allowsSelection = false
         
         registerCells()
         
-        tableView.rowHeight = UITableView.automaticDimension
-        tableView.estimatedRowHeight = 600
-        tableView.backgroundColor = .clear
+        setupTableView()
         
         presenter = MainViewPresenter(view: self, locationService: location, networkService: network)
         setupVideoPlayer()
         
+        
+    }
+    
+    func setupTableView() {
+        tableView.allowsSelection = false
+        tableView.rowHeight = UITableView.automaticDimension
+        tableView.estimatedRowHeight = 600
+        tableView.backgroundColor = .clear
+        tableView.separatorColor = TableDesignConstants.separatorColor
     }
     
     func setupVideoPlayer() {
@@ -70,9 +78,22 @@ class ViewController: UIViewController, MainViewProtocol {
     //MainViewProtocol
     
     func sentMessage(message: WeatherData) {
+        
         testLabel.text = message.city?.name
-        weatherDescription.text = message.list?.first?.weather?.first?.description
+        weatherDescription.text = message.list?.first?.getWeather.description
         testLabel.isHidden = false
+        degreeOnThreeHours.text = presenter.getThreeHourDataModelArr.first?.getTemperature
+        tableView.reloadData()
+    }
+    
+    func failLoad(data: MainModel) {
+        print(presenter.getWeatherModel)
+        
+        weatherDescription.text = data.shortDescription
+        degreeOnThreeHours.text = data.deegre
+        testLabel.text = data.city
+        
+        tableView.reloadData()
     }
     
     func registerCells() {

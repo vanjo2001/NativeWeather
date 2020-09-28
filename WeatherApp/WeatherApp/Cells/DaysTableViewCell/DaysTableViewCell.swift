@@ -10,19 +10,28 @@ import UIKit
 
 class DaysTableViewCell: UITableViewCell {
     
+    var arrOfData: [DayModel]! {
+        didSet {
+            tableView.reloadData()
+        }
+    }
+    
     let tableView: UITableView = {
         let copy = UITableView(frame: .zero)
         
         copy.allowsSelection = false
-        copy.rowHeight = SizeConstants.CellSizes.fiveDaysHeight/5
+//        copy.rowHeight = SizeConstants.CellSizes.fiveDaysHeight/4
+        
+        copy.rowHeight = UITableView.automaticDimension
+        copy.estimatedRowHeight = 600
+        
         copy.backgroundColor = .clear
         
         copy.separatorStyle = .none
         
         let nib = UINib(nibName: IdentifierConstants.dayCell, bundle: Bundle.main)
         
-        copy.register(nib,
-                      forCellReuseIdentifier: IdentifierConstants.dayCell)
+        copy.register(nib, forCellReuseIdentifier: IdentifierConstants.dayCell)
         return copy
     }()
     
@@ -45,7 +54,7 @@ class DaysTableViewCell: UITableViewCell {
         tableView.topAnchor.constraint(equalTo: self.topAnchor, constant: 0).isActive = true
         tableView.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 0).isActive = true
         tableView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: 0).isActive = true
-        tableView.bottomAnchor.constraint(equalToSystemSpacingBelow: self.bottomAnchor, multiplier: 0).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 0).isActive = true
         
     }
     
@@ -57,11 +66,16 @@ class DaysTableViewCell: UITableViewCell {
 
 extension DaysTableViewCell: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        return WeatherConstants.days
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: IdentifierConstants.dayCell, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: IdentifierConstants.dayCell, for: indexPath) as! DayTableViewCell
+        
+        if !arrOfData.isEmpty {
+            cell.data = arrOfData[indexPath.row]
+        }
+        
         cell.backgroundColor = .clear
         return cell
     }
